@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Calculator</title>
     <link rel="stylesheet" href="calc.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="calculator">
-        <input id="operand1" type="number" min="0" placeholder="Left operand">
+        <input id="operand1" type="number" placeholder="Left operand">
         <select id="operator">
             <option value="+">+</option>
             <option value="-">-</option>
@@ -16,8 +17,9 @@
             <option value="/">/</option>
             <option value="%">%</option>
         </select>
-        <input id="operand2" type="number" min="0" placeholder="Right operand">
-        <button onclick="calculate()">Try me!</button>
+        <input id="operand2" type="number" placeholder="Right operand">
+        <button id="calculateBtn">Try me!</button>
+        <p id="result"></p>
     </div>
     <script src="calc.js"></script>
 </body>
