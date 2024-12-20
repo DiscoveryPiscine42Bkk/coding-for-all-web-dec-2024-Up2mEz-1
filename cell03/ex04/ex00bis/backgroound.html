@@ -15,7 +15,7 @@
         // jQuery to change the background color
         $(document).ready(function() {
             $('#changeColorBtn').click(function() {
-                const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+                const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16); /* math.random 0-10    16777215  = 0-16777215 range 256x256x256  16777215 = FFFFFF*/ 
                 $('body').css('background-color', randomColor);
             });
         });
