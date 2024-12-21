@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do or Not To Do</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* CSS สำหรับตกแต่ง To-Do List */
         #ft_list div {
             background-color: #f2f2f2;
             padding: 10px;
@@ -25,58 +25,64 @@
     <button id="newBtn">New</button>
     <div id="ft_list"></div>
 
-    <!-- Include jQuery Library -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script >
+                    // LOAD TODO
+            $(document).ready(() => {
+                loadToDo();
 
-    <!-- Inline JavaScript Code -->
-    <script>
-        $(document).ready(function () {
-            // Load To-Do List from LocalStorage on page load
-            loadToDo();
-
-            // Add a new To-Do
-            $("#newBtn").click(function () {
-                const todoText = prompt("Enter your TO DO:").trim();
-                if (todoText) {
-                    addToDo(todoText);
-                    saveToDo();
-                }
-            });
-
-            // Function to add a To-Do
-            function addToDo(text) {
-                const $toDoDiv = $("<div></div>").text(text);
-
-                // Add click event to delete To-Do
-                $toDoDiv.click(function () {
-                    if (confirm("Do you really want to delete this TO DO?")) {
-                        $(this).remove();
+                // new TODO
+                $('#newBtn').click(() => {
+                    const todoText = $.trim(prompt("Enter your TO DO:"));
+                    if (todoText) {
+                        addToDo(todoText);
                         saveToDo();
                     }
                 });
+            });
 
-                // Append to the list
-                $("#ft_list").append($toDoDiv);
-            }
-
-            // Save To-Do List to LocalStorage
-            function saveToDo() {
-                const toDoArray = [];
-                $("#ft_list div").each(function () {
-                    toDoArray.push($(this).text());
+            // To do to DOM
+            function addToDo(text) {
+                const $toDoDiv = $('<div></div>').text(text).click(function () {
+                    deleteToDo($(this));
                 });
-                localStorage.setItem("todo", JSON.stringify(toDoArray));
-            }
+                const $list = $('#ft_list');
 
-            // Load To-Do List from LocalStorage
-            function loadToDo() {
-                const toDoData = localStorage.getItem("todo");
-                if (toDoData) {
-                    const toDoArray = JSON.parse(toDoData);
-                    toDoArray.forEach(item => addToDo(item));
+                // add to the top of the list
+                if ($list.children().length) {
+                    $list.prepend($toDoDiv);
+                } else {
+                    $list.append($toDoDiv);
                 }
             }
-        });
+
+            // remove todo
+            function deleteToDo($toDoDiv) {
+                if (confirm("Do you really want to delete this TO DO?")) {
+                    $toDoDiv.remove();
+                    saveToDo();
+                }
+            }
+
+            // Save To-Do List to cookies
+            function saveToDo() {
+                const toDoArray = [];
+                $('#ft_list div').each(function () {
+                    toDoArray.push($(this).text());
+                });
+                document.cookie = "todo=" + encodeURIComponent(JSON.stringify(toDoArray)) + ";path=/";
+            }
+
+            // Load To-Do List from cookies
+            function loadToDo() {
+                const cookie = document.cookie.split('; ').find(row => row.startsWith('todo='));
+                if (cookie) {
+                    const toDoArray = JSON.parse(decodeURIComponent(cookie.split('=')[1]));
+                    $.each(toDoArray.reverse(), (index, item) => {
+                        addToDo(item);
+                    });
+                }
+            }
+
     </script>
 </body>
 </html>
